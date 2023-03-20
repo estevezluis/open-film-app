@@ -99,7 +99,7 @@ export default function VideoPlayer({ movieTitle }: { movieTitle: string }) {
 		if (videoRef.current) {
 			const newTime = (val / 100) * videoRef.current.duration
 
-			videoRef.current.fastSeek(newTime)
+			videoRef.current.currentTime = newTime
 		}
 	}
 
