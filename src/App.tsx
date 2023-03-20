@@ -1,4 +1,5 @@
 import VideoPlayer from './components/VideoPlayer'
+import './index.css'
 
 function App() {
 	const movie = {
