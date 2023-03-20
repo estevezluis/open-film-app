@@ -1,10 +1,12 @@
-import React from 'react';
+import VideoPlayer from './components/VideoPlayer'
 
 function App() {
+	const movie = {
+		title: 'Big Buck Bunny'
+	}
+
 	return (
-		<h1 className="text-3xl font-bold underline">
-			Hello world!
-		</h1>
+		<VideoPlayer movieTitle={movie.title} />
 	);
 }
 
