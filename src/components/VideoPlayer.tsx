@@ -3,14 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
 	faArrowRotateLeft, faArrowRotateRight, faXmark, faExpand, faCompress, faCirclePlay, faCirclePause, faVolumeUp
 } from '@fortawesome/free-solid-svg-icons'
-import Video from '../assets/BigBuckBunny720p30s.mp4'
+import { Movie, Episode } from '../types'
 
 const SEEK_BY_SECONDS = 15
-const DELAY_MENU_BY_SECONDS = 3
+const DELAY_MENU_BY_SECONDS = 1
 const menuButtonClassName = "opacity-25 hover:opacity-100 hover:cursor"
 const menuButtonIconStyle = { color: 'white', fontSize: '50px' }
 
-export default function VideoPlayer({ movieTitle }: { movieTitle: string }) {
+export default function VideoPlayer({film, onClose }: {film: Movie | Episode, onClose: Function}) {
 	const videoContainerRef = useRef<HTMLDivElement>(null)
 	const videoRef = useRef<HTMLVideoElement>(null)
 	const [showMenu, setShowMenu] = useState(true)
@@ -28,7 +28,6 @@ export default function VideoPlayer({ movieTitle }: { movieTitle: string }) {
 			timeoutId = window.setTimeout(() => {
 				setShowMenu(false)
 			}, DELAY_MENU_BY_SECONDS * 1000)
-			console.log(timeoutId)
 		}
 
 		window.addEventListener('mousemove', showHideMenu)
@@ -105,7 +104,9 @@ export default function VideoPlayer({ movieTitle }: { movieTitle: string }) {
 
 	function fullScreenBtnClicked() { }
 
-	function closePlayerBtnClicked() { }
+	function closePlayerBtnClicked() {
+		onClose()
+	 }
 
 	function videoControlButtonClicked() {
 		if (videoRef.current) {
@@ -119,7 +120,7 @@ export default function VideoPlayer({ movieTitle }: { movieTitle: string }) {
 
 	return (
 		<div ref={videoContainerRef} className="flex flex-col justify-between h-screen">
-			<video ref={videoRef} className="-z-10 absolute inset-0 w-full h-full object-cover bg-black" src={Video} ></video>
+			<video ref={videoRef} className="-z-10 absolute inset-0 w-full h-full object-cover bg-black" src={film.videoSource}></video>
 			{showMenu &&
 				<div className="absolute inset-0" style={{
 					background: 'linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,1) 100%)',
@@ -143,7 +144,7 @@ export default function VideoPlayer({ movieTitle }: { movieTitle: string }) {
 						</button>
 					</div>
 					<div className="text-center text-3xl text-white">
-						<h1>{movieTitle}</h1>
+						<h1>{film.title}</h1>
 					</div>
 					<div className="flex justify-center gap-36 items-center h-screen">
 						<button className={menuButtonClassName} onClick={seekBackward}>

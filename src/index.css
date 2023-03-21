@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.font-whitney {
+	font-family: HCo Whitney SSm,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
+}
+
 .slider {
 	-webkit-appearance: none;
 	width: 100%;
