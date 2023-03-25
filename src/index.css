@@ -1,5 +1,5 @@
 .font-whitney {
-	font-family: HCo Whitney SSm,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
+	font-family: HCo Whitney SSm, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 .slider {
@@ -50,7 +50,7 @@ div.slick-list {
 }
 
 .skeleton {
-	animation: skeleton-loading 1s linear infinite alternate;	
+	animation: skeleton-loading 1s linear infinite alternate;
 }
 
 @keyframes skeleton-loading {

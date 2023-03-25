@@ -18,24 +18,24 @@ export enum MovieRating {
 }
 
 export interface Film {
-	id: string;
-	title: string;
-	description: string;
-	releaseYear: string;
-	imageSource: string;
-	videoSource: string;
-	duration: number;
-	director: string;
-	categories: category[];
-	rating: MovieRating | TVRating;
+	id: string
+	title: string
+	description: string
+	releaseYear: string
+	imageSource: string
+	videoSource: string
+	duration: number
+	director: string
+	categories: category[]
+	rating: MovieRating | TVRating
 }
 
 export interface Movie extends Film {
-	type: 'Movie';
+	type: 'Movie'
 }
 
 export interface Episode extends Film {
-	type: 'Episode';
-	season: number;
-	episodeNumber: number;
+	type: 'Episode'
+	season: number
+	episodeNumber: number
 }
