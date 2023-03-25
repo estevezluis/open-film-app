@@ -27,12 +27,14 @@ export default function VideoPlayer({
 	const videoContainerRef = useRef<HTMLDivElement>(null)
 	const videoRef = useRef<HTMLVideoElement>(null)
 	const [showMenu, setShowMenu] = useState(true)
+	const [showVolumeControl, setShowVolumeControl] = useState(false)
 	const [videoStats, setVideoStats] = useState({
 		currentTime: 0,
 		duration: 0,
 		fullscreen: false,
 		paused: true,
 		progress: 0,
+		volume: 100,
 	})
 
 	useEffect(() => {
@@ -52,12 +54,17 @@ export default function VideoPlayer({
 		videoElement?.addEventListener('timeupdate', timeUpdate)
 		videoElement?.addEventListener('play', play)
 		videoElement?.addEventListener('pause', pause)
+		videoElement?.addEventListener('volumechange', onVolumeChangeEvent)
 
 		return () => {
 			window.removeEventListener('mousemove', showHideMenu)
 			videoElement?.removeEventListener('timeupdate', timeUpdate)
 			videoElement?.removeEventListener('play', play)
 			videoElement?.removeEventListener('pause', pause)
+			videoElement?.removeEventListener(
+				'volumechange',
+				onVolumeChangeEvent
+			)
 			window.clearTimeout(timeoutId)
 		}
 	}, [])
@@ -123,7 +130,21 @@ export default function VideoPlayer({
 		}
 	}
 
-	function fullScreenBtnClicked() {}
+	async function fullScreenBtnClicked() {
+		if (videoContainerRef.current) {
+			let fullscreen = false
+			if (videoStats.fullscreen) {
+				document.exitFullscreen()
+			} else {
+				await videoContainerRef.current.requestFullscreen()
+				fullscreen = true
+			}
+
+			setVideoStats((prev) => {
+				return { ...prev, fullscreen }
+			})
+		}
+	}
 
 	function closePlayerBtnClicked() {
 		onClose()
@@ -137,6 +158,26 @@ export default function VideoPlayer({
 				videoRef.current.pause()
 			}
 		}
+	}
+
+	function volumeBtnClick() {
+		setShowVolumeControl((prev) => !prev)
+	}
+
+	function onVolumeChange(e: React.ChangeEvent<HTMLInputElement>) {
+		const val = Number(e.currentTarget.value) / 100
+
+		if (videoRef.current) {
+			videoRef.current.volume = val
+		}
+	}
+
+	function onVolumeChangeEvent() {
+		const val = Number(videoRef.current?.volume ?? 0) * 100
+
+		setVideoStats((prev) => {
+			return { ...prev, volume: val }
+		})
 	}
 
 	return (
@@ -164,12 +205,36 @@ export default function VideoPlayer({
 			{showMenu && (
 				<div className="z-20 flex flex-col justify-between h-screen">
 					<div className="flex justify-end gap-10 py-4 px-6">
-						<button className={menuButtonClassName}>
-							<FontAwesomeIcon
-								style={menuButtonIconStyle}
-								icon={faVolumeUp}
-							/>
-						</button>
+						<div>
+							<span>
+								<button
+									className={menuButtonClassName + ' block'}
+									onClick={volumeBtnClick}
+								>
+									<FontAwesomeIcon
+										style={menuButtonIconStyle}
+										icon={faVolumeUp}
+									/>
+								</button>
+								<div className="relative">
+									<div
+										className={
+											'absolute h-56 w-16 bg-gray-900 z-100' +
+											(!showVolumeControl
+												? ' hidden'
+												: '')
+										}
+									>
+										<input
+											className="-rotate-90 translate-y-[500%] -translate-x-[32.25%]"
+											type="range"
+											onChange={onVolumeChange}
+											value={videoStats.volume}
+										/>
+									</div>
+								</div>
+							</span>
+						</div>
 						<button
 							onClick={fullScreenBtnClicked}
 							className={menuButtonClassName}

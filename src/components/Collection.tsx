@@ -35,8 +35,15 @@ export default function Collection({ films }: { films: Film[] }) {
 		speed: 500,
 		slidesToShow: 5,
 		slidesToScroll: 1,
-		dots: true,
+		dots: false,
 		arrows: true,
+	}
+
+	function getRandomWidth() {
+		const randomInt = Math.floor(Math.random() * 4)
+		const widths = ['w-72', 'w-64', 'w-60', 'w-56']
+
+		return widths[randomInt]
 	}
 
 	setTimeout(() => {
@@ -59,7 +66,18 @@ export default function Collection({ films }: { films: Film[] }) {
 									{id === templateMovie.id ? (
 										<>
 											<div className="skeleton rounded-lg h-44 w-72 mb-3"></div>
-											<div className="w-72 skeleton h-2"></div>
+											<div
+												className={
+													getRandomWidth() +
+													' skeleton h-2 mb-1'
+												}
+											></div>
+											<div
+												className={
+													getRandomWidth() +
+													' skeleton h-2'
+												}
+											></div>
 										</>
 									) : (
 										<>
@@ -83,10 +101,7 @@ export default function Collection({ films }: { films: Film[] }) {
 												</div>
 											</Link>
 											<div className="w-72 overflow-hidden whitespace-nowrap text-ellipsis">
-												<Link
-													to={`/watch/${id}`}
-													className=""
-												>
+												<Link to={`/watch/${id}`}>
 													{title}
 												</Link>
 											</div>

@@ -69,7 +69,6 @@ export default function VideoDetail() {
 											style={{
 												color: 'rgb(245, 244, 243)',
 											}}
-											id="show-description"
 										>
 											{film.description}
 										</p>
