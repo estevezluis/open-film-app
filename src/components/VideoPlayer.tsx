@@ -120,7 +120,7 @@ export default function VideoPlayer({film, onClose }: {film: Movie | Episode, on
 
 	return (
 		<div ref={videoContainerRef} className="flex flex-col justify-between h-screen">
-			<video ref={videoRef} className="-z-10 absolute inset-0 w-full h-full object-cover bg-black" src={film.videoSource}></video>
+			<video ref={videoRef} className="-z-10 absolute inset-0 w-full h-full object-cover bg-black" src={`http://localhost:8000/${film.videoSource}`}></video>
 			{showMenu &&
 				<div className="absolute inset-0" style={{
 					background: 'linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,1) 100%)',

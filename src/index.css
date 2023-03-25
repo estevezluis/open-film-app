@@ -1,12 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .font-whitney {
 	font-family: HCo Whitney SSm,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
 }
 
 .slider {
+	appearance: none;
 	-webkit-appearance: none;
 	width: 100%;
 	height: 10px;
@@ -38,4 +35,16 @@
 	border: 0;
 	cursor: pointer;
 	background-color: rgb(226 232 240);
+}
+
+.slick-slide[aria-hidden="true"] {
+	opacity: 45%;
+}
+
+div.slick-list {
+	overflow: visible;
+}
+
+.slick-arrow {
+	z-index: 1;
 }

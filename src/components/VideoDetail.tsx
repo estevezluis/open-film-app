@@ -4,7 +4,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import VideoPlayer from './VideoPlayer'
 
-export default function VideoDetail(film: Movie | Episode) {
+import { useLoaderData } from 'react-router-dom'
+
+export default function VideoDetail() {
+	const film = useLoaderData() as Movie | Episode
+
+	const moreDetails = [{
+		term: 'Rating',
+		details: film.rating
+	}, {
+		term: 'Director',
+		details: film.director
+	}, {
+		term: 'Release Year',
+		details: film.releaseYear
+	}]
+
 	const badgeClassName = "w-fit whitespace-nowrap border rounded px-1 font-medium text-inherit"
 	const [play, setPlay] = useState(false)
 
@@ -29,7 +44,7 @@ export default function VideoDetail(film: Movie | Episode) {
 						<div className="relative w-full md:flex mb-12">
 							<div className="fixed top-0 left-0 w-screen min-h-[70vh] transition-opacity">
 								<div className="z-10 absolute top-0 left-0 right-0 bottom-0 bg-no-repeat bg-center bg-cover bg-top 2xl:block"
-									style={{ backgroundImage: `linear-gradient(0deg, rgb(21, 21, 21) 0%, rgba(21, 21, 21, 0) 50%), linear-gradient(225deg, rgba(21, 21, 21, 0.2) 50%, rgb(21, 21, 21) 99.89%), url(${film.imageSource})` }}>
+									style={{ backgroundImage: `linear-gradient(0deg, rgb(21, 21, 21) 0%, rgba(21, 21, 21, 0) 50%), linear-gradient(225deg, rgba(21, 21, 21, 0.2) 50%, rgb(21, 21, 21) 99.89%), url(http://localhost:8000/${film.imageSource})` }}>
 								</div>
 								<div className="absolute w-full h-12 sm:h-24 lg:h-32 top-0 left-0 right-0 bg-gradient-to-b from-gray-950 to-transparent"></div>
 							</div>
@@ -104,19 +119,13 @@ export default function VideoDetail(film: Movie | Episode) {
 								<div className='mt-8 focus:border-none focus:outline-none'>
 									<div className="flex flex-col">
 										<div className="border border-t-0 border-l-0 border-r-0 border-b-1 border-white/10 py-10 lg:py-16">
-											<section id="overview" className="">
-												<dl className="text-white before:table table-row">
-													<dt className="table-cell float-none pr-2">Rating</dt>
-													<dd className="table-cell float-none">{film.rating}</dd>
-												</dl>
-												<dl className="text-white before:table table-row">
-													<dt className="table-cell float-none pr-2">Release Year</dt>
-													<dd className="table-cell float-none">{film.releaseYear}</dd>
-												</dl>
-												<dl className="text-white before:table table-row">
-													<dt className="table-cell float-none pr-2">Director</dt>
-													<dd className="table-cell float-none">{film.director}</dd>
-												</dl>
+											<section id="overview">
+												{moreDetails.map(({term, details}, i) => {
+													return <dl key={i} className="text-white before:table table-row">
+														<dt className="table-cell float-none pr-2">{term}</dt>
+														<dd className="table-cell float-none">{details}</dd>
+													</dl>
+												})}
 											</section>
 										</div>
 									</div>

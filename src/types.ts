@@ -1,4 +1,4 @@
-export type category = 'Animation' | 'Short' | 'Comedy'
+export type category = 'Animation' | 'Short' | 'Comedy' | 'Action'
 
 export enum TVRating {
 	TV_Y = 'TV-Y',
@@ -17,7 +17,8 @@ export enum MovieRating {
 	NC_17 = 'NC-17',
 }
 
-interface Film {
+export interface Film {
+	id: string;
 	title: string;
 	description: string;
 	releaseYear: string;
