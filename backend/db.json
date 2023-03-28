@@ -1,0 +1,54 @@
+[
+	{
+		"id": "6d7f4c34-1222-4574-bb9a-5cbac1fab8b3",
+		"type": "Movie",
+		"title": "Big Buck Bunny",
+		"description": "An enormous, fluffy, and utterly adorable rabbit is heartlessly harassed by the ruthless, loud, bullying gang of a flying squirrel, who is determined to squash his happiness.",
+		"releaseYear": "2008",
+		"director": "Sacha Goedegebure",
+		"imageSource": "promo.jpg",
+		"videoSource": "BigBuckBunny720p30s.mp4",
+		"rating": "TV-Y7",
+		"duration": 0,
+		"categories": ["Short", "Animation", "Comedy"]
+	},
+	{
+		"id": "2bd28f68-300c-4849-8a5f-f8ca86d7955b",
+		"type": "Movie",
+		"title": "Agent 327 - Operation Barbershop",
+		"description": "Agent 327 is investigating a clue that leads him to a shady barbershop in Amsterdam. Little does he know that he is being tailed by mercenary Boris Kloris.",
+		"releaseYear": "2017",
+		"director": "Hjalti Hjalmarsson",
+		"imageSource": "promo2.jpg",
+		"videoSource": "agent-327/output.m3u8",
+		"rating": "TV-Y7",
+		"duration": 0,
+		"categories": ["Short", "Animation", "Action"]
+	},
+	{
+		"id": "ad4da0ae-d4ec-49fa-83f0-c971e8aa9880",
+		"type": "Movie",
+		"title": "Caminandes 2: Gran Dillama",
+		"description": "Koro hunts for food on the other side of a fence and is once again inspired by the Armadillo but this time to a shocking effect.",
+		"releaseYear": "2013",
+		"director": "Pablo Vazquez",
+		"imageSource": "caminandes-promo.jpg",
+		"videoSource": "videoplayback.mp4",
+		"rating": "TV-Y7",
+		"duration": 0,
+		"categories": ["Short", "Animation"]
+	},
+	{
+		"id": "4689fa55-f857-46c3-a71b-83d894c6cde4",
+		"type": "Movie",
+		"title": "Sintel",
+		"description": "Sintel tells the story of a friendship between a girl named Sintel, a baby dragon and the desperate lengths she will go to when that friendship is taken from her.",
+		"releaseYear": "2010",
+		"director": "Colin Levy",
+		"imageSource": "sintel-promo.jpg",
+		"videoSource": "sintel.mp4",
+		"rating": "TV-Y7",
+		"duration": 0,
+		"categories": ["Animation"]
+	}
+]
