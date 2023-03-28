@@ -46,10 +46,12 @@ export default function VideoPlayer({
 			window.clearTimeout(timeoutId)
 			timeoutId = window.setTimeout(() => {
 				setShowMenu(false)
+				setShowVolumeControl(false)
 			}, DELAY_MENU_BY_SECONDS * 1000)
 		}
 
 		window.addEventListener('mousemove', showHideMenu)
+		window.addEventListener('keydown', onKeyDown)
 		videoElement?.addEventListener('loadeddata', loaded)
 		videoElement?.addEventListener('timeupdate', timeUpdate)
 		videoElement?.addEventListener('play', play)
@@ -58,6 +60,7 @@ export default function VideoPlayer({
 
 		return () => {
 			window.removeEventListener('mousemove', showHideMenu)
+			window.removeEventListener('keydown', onKeyDown)
 			videoElement?.removeEventListener('timeupdate', timeUpdate)
 			videoElement?.removeEventListener('play', play)
 			videoElement?.removeEventListener('pause', pause)
@@ -68,6 +71,27 @@ export default function VideoPlayer({
 			window.clearTimeout(timeoutId)
 		}
 	}, [])
+
+	function onKeyDown(e: KeyboardEvent) {
+		switch (e.code) {
+			case 'KeyF':
+				fullScreenBtnClicked()
+				break
+			case 'Space':
+				videoControlButtonClicked()
+				break
+			case 'ArrowLeft':
+				seekBackward()
+				break
+			case 'ArrowRight':
+				seekForward()
+				break
+			default:
+				break
+		}
+
+		e.preventDefault()
+	}
 
 	function loaded(): void {
 		setVideoStats((prev) => {

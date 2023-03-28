@@ -76,10 +76,12 @@ function App() {
 			element: <VideoDetail />,
 		},
 		{
+			path: '/watch',
+			loader: async () => redirect('/'),
+		},
+		{
 			path: '*',
-			loader: async () => {
-				return redirect('/watch/404')
-			},
+			loader: async () => redirect('/watch/404'),
 		},
 	])
 
