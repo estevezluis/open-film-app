@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCirclePlay } from '@fortawesome/free-solid-svg-icons'
 import Slider from 'react-slick'
 import { Film, TVRating } from '../types'
-import { useState } from 'react'
 
 const SERVER_URL = 'http://localhost:8000'
 export default function Collection({ films }: { films: Film[] }) {
@@ -21,13 +20,6 @@ export default function Collection({ films }: { films: Film[] }) {
 		director: '',
 		categories: [],
 	}
-	const [movies, setMovies] = useState([
-		templateMovie,
-		templateMovie,
-		templateMovie,
-		templateMovie,
-		templateMovie,
-	])
 	const settings = {
 		data: true,
 		center: true,
@@ -46,12 +38,6 @@ export default function Collection({ films }: { films: Film[] }) {
 		return widths[randomInt]
 	}
 
-	setTimeout(() => {
-		setMovies((prev) => {
-			return [...films, ...films, ...films]
-		})
-	}, 3 * 1000)
-
 	return (
 		<div className="bg-gray-900 w-screen h-screen p-2 text-white overflow-hidden">
 			<div className="px-4 sm:px-8 md:px-12 xl:px-16 max-w-full">
@@ -60,7 +46,7 @@ export default function Collection({ films }: { films: Film[] }) {
 						Short Animations
 					</h3>
 					<Slider {...settings}>
-						{movies.map(({ id, imageSource, title }, i) => {
+						{films.map(({ id, imageSource, title }, i) => {
 							return (
 								<div key={id === templateMovie.id ? i : id}>
 									{id === templateMovie.id ? (
@@ -86,7 +72,7 @@ export default function Collection({ films }: { films: Film[] }) {
 													<img
 														src={`${SERVER_URL}/${imageSource}`}
 														alt={title}
-														className="object-cover absolute inset-0 w-full h-full rounded-lg skeleton opacity-70"
+														className="object-cover absolute inset-0 w-full h-full rounded-lg skeleton"
 													/>
 													<div className="absolute inset-0 bg-[#00000088] hover:opacity-100 opacity-0 hover:ease-in-out hover:duration-500">
 														<div className="flex w-full h-full justify-center items-center text-white">

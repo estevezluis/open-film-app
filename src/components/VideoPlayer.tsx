@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import Hls from 'hls.js'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
 	faArrowRotateLeft,
@@ -8,7 +9,9 @@ import {
 	faCompress,
 	faCirclePlay,
 	faCirclePause,
-	faVolumeUp,
+	faVolumeHigh,
+	faVolumeLow,
+	faVolumeOff,
 } from '@fortawesome/free-solid-svg-icons'
 import { Movie, Episode } from '../types'
 
@@ -37,6 +40,8 @@ export default function VideoPlayer({
 		volume: 100,
 	})
 
+	const SERVER_URL = 'http://localhost:8000/'
+
 	useEffect(() => {
 		let timeoutId: number
 		const videoElement = videoRef.current
@@ -58,6 +63,10 @@ export default function VideoPlayer({
 		videoElement?.addEventListener('pause', pause)
 		videoElement?.addEventListener('volumechange', onVolumeChangeEvent)
 
+		const hls = new Hls()
+		hls.loadSource(SERVER_URL + film.videoSource)
+		hls.attachMedia(videoElement as HTMLMediaElement)
+
 		return () => {
 			window.removeEventListener('mousemove', showHideMenu)
 			window.removeEventListener('keydown', onKeyDown)
@@ -70,7 +79,7 @@ export default function VideoPlayer({
 			)
 			window.clearTimeout(timeoutId)
 		}
-	}, [])
+	}, [film.videoSource])
 
 	function onKeyDown(e: KeyboardEvent) {
 		switch (e.code) {
@@ -212,7 +221,6 @@ export default function VideoPlayer({
 			<video
 				ref={videoRef}
 				className="-z-10 absolute inset-0 w-full h-full object-cover bg-black"
-				src={`http://localhost:8000/${film.videoSource}`}
 			></video>
 			{showMenu && (
 				<div
@@ -237,7 +245,13 @@ export default function VideoPlayer({
 								>
 									<FontAwesomeIcon
 										style={menuButtonIconStyle}
-										icon={faVolumeUp}
+										icon={
+											videoStats.volume > 35
+												? faVolumeHigh
+												: videoStats.volume > 0
+												? faVolumeLow
+												: faVolumeOff
+										}
 									/>
 								</button>
 								<div className="relative">
