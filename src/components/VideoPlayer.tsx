@@ -37,10 +37,9 @@ export default function VideoPlayer({
 		fullscreen: false,
 		paused: true,
 		progress: 0,
+		buffered: 0,
 		volume: 100,
 	})
-
-	const SERVER_URL = 'http://localhost:8000/'
 
 	useEffect(() => {
 		let timeoutId: number
@@ -59,18 +58,22 @@ export default function VideoPlayer({
 		window.addEventListener('keydown', onKeyDown)
 		videoElement?.addEventListener('loadeddata', loaded)
 		videoElement?.addEventListener('timeupdate', timeUpdate)
+		videoElement?.addEventListener('progress', onProgress)
 		videoElement?.addEventListener('play', play)
 		videoElement?.addEventListener('pause', pause)
 		videoElement?.addEventListener('volumechange', onVolumeChangeEvent)
 
 		const hls = new Hls()
-		hls.loadSource(SERVER_URL + film.videoSource)
+		hls.loadSource(
+			`${process.env.REACT_APP_SERVER_URL}/${film.videoSource}`
+		)
 		hls.attachMedia(videoElement as HTMLMediaElement)
 
 		return () => {
 			window.removeEventListener('mousemove', showHideMenu)
 			window.removeEventListener('keydown', onKeyDown)
 			videoElement?.removeEventListener('timeupdate', timeUpdate)
+			videoElement?.removeEventListener('progress', onProgress)
 			videoElement?.removeEventListener('play', play)
 			videoElement?.removeEventListener('pause', pause)
 			videoElement?.removeEventListener(
@@ -102,6 +105,29 @@ export default function VideoPlayer({
 		e.preventDefault()
 	}
 
+	function onProgress(): void {
+		if (videoRef.current) {
+			const buffered = videoRef.current.buffered
+			for (let i = 0; i < buffered.length; i++) {
+				if (
+					buffered.start(buffered.length - 1 - i) >
+					videoStats.currentTime
+				) {
+					const bufferedValue =
+						(buffered.end(buffered.length - 1 - i) * 100) /
+						videoStats.duration
+
+					setVideoStats((prev) => {
+						return {
+							...prev,
+							buffered: bufferedValue,
+						}
+					})
+				}
+			}
+		}
+	}
+
 	function loaded(): void {
 		setVideoStats((prev) => {
 			return {
@@ -111,7 +137,7 @@ export default function VideoPlayer({
 		})
 	}
 
-	function timeUpdate(event: Event): void {
+	function timeUpdate(): void {
 		setVideoStats((prev) => {
 			const currentTime =
 				videoRef.current?.currentTime ?? prev.currentTime
@@ -341,7 +367,7 @@ export default function VideoPlayer({
 							step="any"
 							className="w-full slider hover:cursor-pointer"
 							style={{
-								background: `linear-gradient(90deg, white 0% ${videoStats.progress}%, rgba(225, 225, 225, 0.5) ${videoStats.progress}% 100%)`,
+								background: `linear-gradient(90deg, white 0% ${videoStats.progress}%, rgba(123, 123, 123, 0.75) ${videoStats.progress}% ${videoStats.buffered}%, rgba(225, 225, 225, 0.5) ${videoStats.buffered}% 100%)`,
 							}}
 							onChange={sliderOnChange}
 						/>

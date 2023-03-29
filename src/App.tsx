@@ -4,12 +4,14 @@ import { createBrowserRouter, RouterProvider, redirect } from 'react-router-dom'
 import VideoDetail from './components/VideoDetail'
 import Collection from './components/Collection'
 import { useEffect, useState } from 'react'
+import AddFilm from './components/AddFilm'
+import Login from './components/Login'
 
 function App() {
 	const [movies, setMovies] = useState([])
 
 	useEffect(() => {
-		fetch('http://localhost:8000/db')
+		fetch(`${process.env.REACT_APP_SERVER_URL}/films`)
 			.then((res) => res.json())
 			.then((res) => {
 				setMovies(res)
@@ -54,6 +56,14 @@ function App() {
 				return movies[i]
 			},
 			element: <VideoDetail />,
+		},
+		{
+			path: '/add-film',
+			element: <AddFilm />,
+		},
+		{
+			path: '/login',
+			element: <Login />,
 		},
 		{
 			path: '/watch',

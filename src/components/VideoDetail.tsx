@@ -52,7 +52,7 @@ export default function VideoDetail() {
 									<div
 										className="z-10 absolute top-0 left-0 right-0 bottom-0 bg-no-repeat bg-center bg-cover bg-top 2xl:block"
 										style={{
-											backgroundImage: `linear-gradient(0deg, rgb(21, 21, 21) 0%, rgba(21, 21, 21, 0) 50%), linear-gradient(225deg, rgba(21, 21, 21, 0.2) 50%, rgb(21, 21, 21) 99.89%), url(http://localhost:8000/${film.imageSource})`,
+											backgroundImage: `linear-gradient(0deg, rgb(21, 21, 21) 0%, rgba(21, 21, 21, 0) 50%), linear-gradient(225deg, rgba(21, 21, 21, 0.2) 50%, rgb(21, 21, 21) 99.89%), url(${process.env.REACT_APP_SERVER_URL}/${film.imageSource})`,
 										}}
 									></div>
 									<div className="absolute w-full h-12 sm:h-24 lg:h-32 top-0 left-0 right-0 bg-gradient-to-b from-gray-950 to-transparent"></div>

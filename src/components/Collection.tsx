@@ -6,7 +6,6 @@ import { faCirclePlay } from '@fortawesome/free-solid-svg-icons'
 import Slider from 'react-slick'
 import { Film, TVRating } from '../types'
 
-const SERVER_URL = 'http://localhost:8000'
 export default function Collection({ films }: { films: Film[] }) {
 	const templateMovie: Film = {
 		id: '0',
@@ -70,7 +69,7 @@ export default function Collection({ films }: { films: Film[] }) {
 											<Link to={`/watch/${id}`}>
 												<div className="relative rounded-lg cursor-pointer h-44 w-72 overflow-hidden duration-[400ms] ease-in-out mb-3">
 													<img
-														src={`${SERVER_URL}/${imageSource}`}
+														src={`${process.env.REACT_APP_SERVER_URL}/${imageSource}`}
 														alt={title}
 														className="object-cover absolute inset-0 w-full h-full rounded-lg skeleton"
 													/>
