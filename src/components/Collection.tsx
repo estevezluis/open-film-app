@@ -1,12 +1,15 @@
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import { Link } from 'react-router-dom'
+import { Link, useLoaderData } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCirclePlay } from '@fortawesome/free-solid-svg-icons'
 import Slider from 'react-slick'
-import { Film, TVRating } from '../types'
+import { Film, Movie, Episode, TVRating } from '../types'
 
-export default function Collection({ films }: { films: Film[] }) {
+export default function Collection() {
+	const films = useLoaderData() as Film[]
+	console.log(films)
+
 	const templateMovie: Film = {
 		id: '0',
 		title: '',

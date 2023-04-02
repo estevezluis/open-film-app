@@ -107,24 +107,16 @@ export default function VideoPlayer({
 
 	function onProgress(): void {
 		if (videoRef.current) {
-			const buffered = videoRef.current.buffered
-			for (let i = 0; i < buffered.length; i++) {
-				if (
-					buffered.start(buffered.length - 1 - i) >
-					videoStats.currentTime
-				) {
-					const bufferedValue =
-						(buffered.end(buffered.length - 1 - i) * 100) /
-						videoStats.duration
-
-					setVideoStats((prev) => {
-						return {
-							...prev,
-							buffered: bufferedValue,
-						}
-					})
+			const { current: video } = videoRef
+			const buffered = video.buffered.length ? video.buffered.end(0) : 0
+			const duration = video.duration // Get the total duration of the video
+			const bufferedPercent = (buffered / duration) * 100 // Calculate the buffered percentage
+			setVideoStats((prev) => {
+				return {
+					...prev,
+					buffered: bufferedPercent,
 				}
-			}
+			})
 		}
 	}
 
@@ -263,7 +255,7 @@ export default function VideoPlayer({
 			{showMenu && (
 				<div className="z-20 flex flex-col justify-between h-screen">
 					<div className="flex justify-end gap-10 py-4 px-6">
-						<div>
+						<div className="w-16">
 							<span>
 								<button
 									className={menuButtonClassName + ' block'}

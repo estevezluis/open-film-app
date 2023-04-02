@@ -1,9 +1,25 @@
+import axios from 'axios'
 import { TVRating, MovieRating } from '../types'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
+import { useEffect, useState } from 'react'
 
 const END_YEAR = 2000
 export default function AddFilm() {
+	const [progress, setProgress] = useState(0)
+
+	useEffect(() => {
+		const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+			if (formik.isSubmitting || formik.isValidating) {
+				event.preventDefault()
+			}
+		}
+
+		window.addEventListener('beforeunload', handleBeforeUnload)
+		return () => {
+			window.removeEventListener('beforeunload', handleBeforeUnload)
+		}
+	}, [])
 	function ratingToOption(rating: string, i: number) {
 		return (
 			<option value={rating} key={i}>
@@ -53,12 +69,9 @@ export default function AddFilm() {
 			}),
 		}),
 		onSubmit: (values) => {
-			console.log(values)
-			const url = new URL(`${process.env.REACT_APP_SERVER_URL}/add-film`)
 			const fd = new FormData()
 
 			for (const [name, val] of Object.entries(values)) {
-				console.log(name, val)
 				if (typeof val === 'object' && 'file' in val) {
 					fd.append(name, val.file as Blob)
 				} else {
@@ -66,12 +79,21 @@ export default function AddFilm() {
 				}
 			}
 
-			const request = new Request(url, {
-				method: 'POST',
-				body: fd,
+			axios({
+				url: `${process.env.REACT_APP_SERVER_URL}/add-film`,
+				method: 'post',
+				data: fd,
+				headers: { 'Content-Type': 'multipart/form-data' },
+				onUploadProgress: (progressEvent) => {
+					const percentCompleted = Math.round(
+						(progressEvent.loaded * 100) /
+							(progressEvent?.total ?? progressEvent.loaded * 100)
+					)
+					setProgress(percentCompleted)
+				},
+			}).finally(() => {
+				formik.setSubmitting(false)
 			})
-
-			fetch(request)
 		},
 	})
 
@@ -95,6 +117,9 @@ export default function AddFilm() {
 								className={inputStyle}
 								name="type"
 								id="type"
+								disabled={
+									formik.isValidating || formik.isSubmitting
+								}
 								value={formik.values.type}
 								onChange={formik.handleChange}
 							>
@@ -112,6 +137,9 @@ export default function AddFilm() {
 								type="text"
 								name="title"
 								id="title"
+								disabled={
+									formik.isValidating || formik.isSubmitting
+								}
 								value={formik.values.title}
 								onChange={formik.handleChange}
 							/>
@@ -126,6 +154,9 @@ export default function AddFilm() {
 								type="text"
 								name="description"
 								id="description"
+								disabled={
+									formik.isValidating || formik.isSubmitting
+								}
 								value={formik.values.description}
 								onChange={formik.handleChange}
 							/>
@@ -139,6 +170,9 @@ export default function AddFilm() {
 								className={inputStyle}
 								name="releaseYear"
 								id="releaseYear"
+								disabled={
+									formik.isValidating || formik.isSubmitting
+								}
 								value={formik.values.releaseYear}
 								onChange={formik.handleChange}
 							>
@@ -155,6 +189,9 @@ export default function AddFilm() {
 								type="text"
 								name="director"
 								id="director"
+								disabled={
+									formik.isValidating || formik.isSubmitting
+								}
 								value={formik.values.director}
 								onChange={formik.handleChange}
 							/>
@@ -168,6 +205,9 @@ export default function AddFilm() {
 								className={inputStyle}
 								name="rating"
 								id="rating"
+								disabled={
+									formik.isValidating || formik.isSubmitting
+								}
 								value={formik.values.rating}
 								onChange={formik.handleChange}
 							>
@@ -186,6 +226,9 @@ export default function AddFilm() {
 								type="file"
 								name="videoFile"
 								id="videoFile"
+								disabled={
+									formik.isValidating || formik.isSubmitting
+								}
 								value={formik.values.videoFile.name}
 								accept="video/mp4"
 								onChange={async (event) => {
@@ -210,6 +253,9 @@ export default function AddFilm() {
 								type="file"
 								name="imageFile"
 								id="imageFile"
+								disabled={
+									formik.isValidating || formik.isSubmitting
+								}
 								value={formik.values.imageFile.name}
 								accept="image/jpeg"
 								onChange={async (event) => {
@@ -226,11 +272,27 @@ export default function AddFilm() {
 							/>
 						</div>
 						<button
-							className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+							className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-900"
 							type="submit"
+							disabled={
+								formik.isSubmitting || formik.isValidating
+							}
 						>
 							Submit
 						</button>
+						{!!formik.isSubmitting && (
+							<div>
+								<label className={labelStyle} htmlFor="file">
+									File progress:
+								</label>
+								<progress
+									className={inputStyle}
+									id="file"
+									max="100"
+									value={progress}
+								></progress>
+							</div>
+						)}
 					</form>
 				</div>
 			</div>

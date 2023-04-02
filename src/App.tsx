@@ -3,20 +3,13 @@ import { Film, TVRating } from './types'
 import { createBrowserRouter, RouterProvider, redirect } from 'react-router-dom'
 import VideoDetail from './components/VideoDetail'
 import Collection from './components/Collection'
-import { useEffect, useState } from 'react'
 import AddFilm from './components/AddFilm'
 import Login from './components/Login'
 
 function App() {
-	const [movies, setMovies] = useState([])
-
-	useEffect(() => {
-		fetch(`${process.env.REACT_APP_SERVER_URL}/films`)
-			.then((res) => res.json())
-			.then((res) => {
-				setMovies(res)
-			})
-	}, [])
+	const filmsP = fetch(`${process.env.REACT_APP_SERVER_URL}/films`).then(
+		(res) => res.json()
+	)
 
 	const fourOFour: Film = {
 		id: '404',
@@ -35,7 +28,11 @@ function App() {
 		{
 			path: '/',
 			index: true,
-			element: <Collection films={movies} />,
+			loader: async () => {
+				const response = (await filmsP) as Film[]
+				return response
+			},
+			element: <Collection />,
 		},
 		{
 			path: '/watch/404',
@@ -45,15 +42,16 @@ function App() {
 			element: <VideoDetail />,
 		},
 		{
-			path: '/watch/:movieId',
+			path: '/watch/:filmId',
 			loader: async ({ params }) => {
-				const i = movies.findIndex(({ id }) => id === params.movieId)
+				const films = (await filmsP) as Film[]
+				const i = films.findIndex(({ id }) => id === params.filmId)
 
 				if (i === -1) {
 					return redirect('/watch/404')
 				}
 
-				return movies[i]
+				return films[i]
 			},
 			element: <VideoDetail />,
 		},
