@@ -5,6 +5,7 @@ import VideoDetail from './components/VideoDetail'
 import Collection from './components/Collection'
 import AddFilm from './components/AddFilm'
 import Login from './components/Login'
+import Dashboard from './components/Dashboard'
 
 function App() {
 	const filmsP = fetch(`${process.env.REACT_APP_SERVER_URL}/films`).then(
@@ -62,6 +63,14 @@ function App() {
 		{
 			path: '/login',
 			element: <Login />,
+		},
+		{
+			path: '/dashboard',
+			loader: async () => {
+				const response = (await filmsP) as Film[]
+				return response
+			},
+			element: <Dashboard />,
 		},
 		{
 			path: '/watch',

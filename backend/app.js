@@ -2,6 +2,7 @@ const { existsSync, mkdirSync, renameSync } = require('node:fs')
 const { spawn } = require('node:child_process')
 const { queue } = require('async')
 const express = require('express')
+const bodyParser = require('body-parser')
 const multer = require('multer')
 const cors = require('cors')
 const { v4: uuidv4 } = require('uuid')
@@ -74,6 +75,7 @@ function validate(req, res, next) {
 }
 
 app.use(cors())
+app.use(bodyParser.json())
 app.use(express.static('static'))
 
 app.get('/films', (_req, res) => {
@@ -90,6 +92,33 @@ app.get('/films/:id', (req, res) => {
 	}
 
 	return res.json(filmDb[i])
+})
+
+app.put('/films/:id', (req, res) => {
+	const { error, value } = Joi.object({
+		title: Joi.string().required(),
+		description: Joi.string().required(),
+	}).validate(req.body)
+
+	if (error) {
+		return res.status(400).json({
+			error: error.details[0].message,
+		})
+	}
+
+	const i = filmDb.findIndex((film) => film.id === req.params.id)
+
+	if (1 === -1) {
+		return res.status(400).json({
+			error: 'Film ID not found.',
+		})
+	}
+
+	const newFilm = { ...filmDb[i], ...value }
+
+	filmDb[i] = newFilm
+
+	return res.json(newFilm)
 })
 
 app.post(
